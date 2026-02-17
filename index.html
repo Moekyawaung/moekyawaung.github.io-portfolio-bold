@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moe Kyaw Aung — Bold</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--yellow:#FFE000;--pink:#FF3CAC;--cyan:#00F5FF;--orange:#FF6B35;--green:#00FF87;--bg:#0D0D0D;--white:#FFFFFF}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--white);font-family:'Archivo',sans-serif;overflow-x:hidden}
+  ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--yellow)}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(13,13,13,0.9);backdrop-filter:blur(10px);border-bottom:2px solid var(--yellow)}
+  .logo{font-family:'Archivo Black',sans-serif;font-size:18px;color:var(--yellow);text-decoration:none;text-transform:uppercase;letter-spacing:0.05em}
+  .nav-links{display:flex;gap:8px;list-style:none}
+  .nav-links a{padding:8px 18px;border:2px solid transparent;color:var(--white);text-decoration:none;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;transition:all 0.2s}
+  .nav-links a:hover{border-color:var(--yellow);color:var(--yellow);background:rgba(255,224,0,0.1)}
+
+  .hero{min-height:100vh;padding:100px 40px 60px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+  .blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.25;animation:float 8s ease-in-out infinite}
+  .blob-1{width:500px;height:500px;background:var(--pink);top:-100px;right:-100px;animation-delay:0s}
+  .blob-2{width:400px;height:400px;background:var(--cyan);bottom:0;left:-100px;animation-delay:3s}
+  .blob-3{width:300px;height:300px;background:var(--yellow);top:50%;right:20%;animation-delay:6s}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,20px) scale(0.95)}}
+
+  .hero-inner{position:relative;z-index:1;max-width:1100px}
+  .hero-badge{display:inline-block;background:var(--yellow);color:var(--bg);font-weight:700;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;padding:6px 16px;margin-bottom:32px;animation:slideIn 0.6s 0.1s both}
+  .hero-title{font-family:'Archivo Black',sans-serif;font-size:clamp(48px,9vw,130px);line-height:0.92;text-transform:uppercase;letter-spacing:-0.03em;margin-bottom:40px}
+  .hero-title .line{overflow:hidden;display:block}
+  .hero-title .line span{display:block;animation:slideUp 0.8s ease both}
+  .hero-title .line:nth-child(1) span{animation-delay:0.2s}
+  .hero-title .line:nth-child(2) span{animation-delay:0.35s;color:var(--yellow)}
+  .hero-title .line:nth-child(3) span{animation-delay:0.5s;-webkit-text-stroke:2px var(--white);color:transparent}
+  .hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;animation:slideIn 0.8s 0.7s both}
+  .hero-desc{max-width:420px;color:rgba(255,255,255,0.6);font-size:15px;line-height:1.7}
+  .hero-cta{flex-shrink:0;display:inline-block;background:var(--yellow);color:var(--bg);text-decoration:none;font-family:'Archivo Black',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;padding:18px 40px;position:relative;transition:transform 0.2s}
+  .hero-cta::after{content:'';position:absolute;inset:0;border:2px solid var(--yellow);transform:translate(6px,6px);transition:transform 0.2s}
+  .hero-cta:hover{transform:translate(-3px,-3px)}
+  .hero-cta:hover::after{transform:translate(9px,9px)}
+
+  .marquee-wrap{overflow:hidden;border-top:2px solid rgba(255,255,255,0.1);border-bottom:2px solid rgba(255,255,255,0.1);padding:16px 0}
+  .marquee-inner{display:flex;animation:marquee 18s linear infinite;width:max-content}
+  .marquee-text{font-family:'Archivo Black',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.3);padding:0 32px;white-space:nowrap}
+  .marquee-dot{color:var(--yellow);padding:0 8px}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  #work{padding:100px 40px;max-width:1100px;margin:0 auto}
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:60px}
+  .section-title{font-family:'Archivo Black',sans-serif;font-size:clamp(36px,5vw,64px);text-transform:uppercase;line-height:1}
+  .section-title span{color:var(--yellow)}
+
+  .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .project-card{position:relative;aspect-ratio:4/3;overflow:hidden;border:2px solid rgba(255,255,255,0.1)}
+  .project-card:nth-child(1){--c:var(--cyan);color:var(--bg)}
+  .project-card:nth-child(2){--c:var(--pink)}
+  .project-card:nth-child(3){--c:var(--green);color:var(--bg)}
+  .card-bg{position:absolute;inset:0;background:var(--c);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.77,0,0.175,1)}
+  .project-card:hover .card-bg{transform:translateY(0)}
+  .card-num{position:absolute;top:24px;left:24px;font-family:'Archivo Black',sans-serif;font-size:72px;line-height:1;color:rgba(255,255,255,0.08);z-index:1;transition:color 0.3s}
+  .project-card:hover .card-num{color:rgba(0,0,0,0.1)}
+  .card-content{position:absolute;bottom:0;left:0;right:0;padding:32px;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 100%);transition:background 0.3s}
+  .project-card:hover .card-content{background:transparent}
+  .project-card:nth-child(1):hover .card-content,.project-card:nth-child(3):hover .card-content{color:var(--bg)}
+  .card-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;opacity:0.6;margin-bottom:8px}
+  .card-title{font-family:'Archivo Black',sans-serif;font-size:24px;text-transform:uppercase;line-height:1.1}
+  .card-arrow{position:absolute;top:24px;right:24px;width:48px;height:48px;border:2px solid rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;z-index:2;transition:all 0.3s}
+  .project-card:hover .card-arrow{border-color:var(--bg);background:var(--bg);color:var(--c);transform:rotate(45deg)}
+
+  #about{padding:100px 40px;background:var(--white);color:var(--bg)}
+  .about-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+  .about-title{font-family:'Archivo Black',sans-serif;font-size:clamp(36px,5vw,64px);text-transform:uppercase;line-height:0.95;margin-bottom:24px}
+  .about-title .hl{color:var(--pink)}
+  .about-text{font-size:16px;line-height:1.8;color:#333;margin-bottom:32px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .stat{text-align:center;padding:24px;border:3px solid var(--bg)}
+  .stat-num{font-family:'Archivo Black',sans-serif;font-size:48px;line-height:1;display:block}
+  .stat-num.c1{color:var(--pink)}
+  .stat-num.c2{-webkit-text-stroke:2px #00ccff;color:transparent}
+  .stat-num.c3{color:var(--orange)}
+  .stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-top:8px}
+  .skills-row{display:flex;flex-wrap:wrap;gap:12px}
+  .skill-chip{padding:10px 20px;background:var(--bg);color:var(--white);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;transition:background 0.2s}
+  .skill-chip:hover{background:var(--pink)}
+
+  #contact{padding:100px 40px;text-align:center;background:var(--yellow);color:var(--bg)}
+  .contact-title{font-family:'Archivo Black',sans-serif;font-size:clamp(48px,9vw,120px);text-transform:uppercase;line-height:0.9;margin-bottom:48px}
+  .contact-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+  .contact-btn{display:inline-block;padding:16px 36px;border:3px solid var(--bg);color:var(--bg);text-decoration:none;font-family:'Archivo Black',sans-serif;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;transition:all 0.2s}
+  .contact-btn.filled{background:var(--bg);color:var(--yellow)}
+  .contact-btn:hover:not(.filled){background:var(--bg);color:var(--yellow)}
+  .contact-btn.filled:hover{background:transparent;color:var(--bg)}
+
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
+  @media(max-width:768px){.projects-grid,.about-inner{grid-template-columns:1fr}.hero-bottom{flex-direction:column}nav{padding:16px 20px}.nav-links{gap:4px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#" class="logo">MKA</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-inner">
+    <span class="hero-badge">Available for Freelance · Tachileik, Myanmar</span>
+    <h1 class="hero-title">
+      <span class="line"><span>Android</span></span>
+      <span class="line"><span>Dev &</span></span>
+      <span class="line"><span>Designer</span></span>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Moe Kyaw Aung — building clean, functional digital experiences across Android, data visualization, and the web.</p>
+      <a href="#work" class="hero-cta">See My Work →</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-text">Kotlin <span class="marquee-dot">✦</span> Jetpack Compose <span class="marquee-dot">✦</span> R / ggplot2 <span class="marquee-dot">✦</span> Shiny <span class="marquee-dot">✦</span> Jekyll <span class="marquee-dot">✦</span> Material 3 <span class="marquee-dot">✦</span> Android Dev</span>
+    <span class="marquee-text">Kotlin <span class="marquee-dot">✦</span> Jetpack Compose <span class="marquee-dot">✦</span> R / ggplot2 <span class="marquee-dot">✦</span> Shiny <span class="marquee-dot">✦</span> Jekyll <span class="marquee-dot">✦</span> Material 3 <span class="marquee-dot">✦</span> Android Dev</span>
+    <span class="marquee-text">Kotlin <span class="marquee-dot">✦</span> Jetpack Compose <span class="marquee-dot">✦</span> R / ggplot2 <span class="marquee-dot">✦</span> Shiny <span class="marquee-dot">✦</span> Jekyll <span class="marquee-dot">✦</span> Material 3 <span class="marquee-dot">✦</span> Android Dev</span>
+  </div>
+</div>
+
+<section id="work">
+  <div class="section-header reveal">
+    <h2 class="section-title">Selected <span>Work</span></h2>
+  </div>
+  <div class="projects-grid reveal">
+    <div class="project-card">
+      <div class="card-bg"></div>
+      <div class="card-num">01</div>
+      <div class="card-content">
+        <p class="card-tag">Android · Kotlin</p>
+        <h3 class="card-title">Portfolio App</h3>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+    <div class="project-card">
+      <div class="card-bg"></div>
+      <div class="card-num">02</div>
+      <div class="card-content">
+        <p class="card-tag">Data Viz · R</p>
+        <h3 class="card-title">Dashboard</h3>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+    <div class="project-card">
+      <div class="card-bg"></div>
+      <div class="card-num">03</div>
+      <div class="card-content">
+        <p class="card-tag">Web · Jekyll</p>
+        <h3 class="card-title">Portfolio Site</h3>
+      </div>
+      <div class="card-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-inner">
+    <div class="reveal">
+      <div class="stats">
+        <div class="stat"><span class="stat-num c1">3+</span><p class="stat-label">Years Coding</p></div>
+        <div class="stat"><span class="stat-num c2">10+</span><p class="stat-label">Projects</p></div>
+        <div class="stat"><span class="stat-num c3">3</span><p class="stat-label">Tech Stacks</p></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <h2 class="about-title">Who <span class="hl">Am</span> I?</h2>
+      <p class="about-text">Android Developer, Web Designer, and Data Visualization specialist from Tachileik, Myanmar. I build clean, functional digital experiences that make a real difference.</p>
+      <div class="skills-row">
+        <span class="skill-chip">Kotlin</span>
+        <span class="skill-chip">Compose</span>
+        <span class="skill-chip">MVVM</span>
+        <span class="skill-chip">R</span>
+        <span class="skill-chip">ggplot2</span>
+        <span class="skill-chip">Shiny</span>
+        <span class="skill-chip">Jekyll</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="contact-title reveal">Let's Work<br>Together</h2>
+  <div class="contact-links reveal">
+    <a href="https://github.com/Moekyawaung" target="_blank" class="contact-btn filled">GitHub</a>
+    <a href="https://moekyawaung.github.io/#contact" target="_blank" class="contact-btn">Hire Me</a>
+  </div>
+</section>
+
+<script>
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
