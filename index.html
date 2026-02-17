@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moe Kyaw Aung — Bold Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080808;
+  --white: #F2F0EC;
+  --yellow: #F5E642;
+  --pink: #FF2D78;
+  --cyan: #0FF4C6;
+  --purple: #9B5DE5;
+  --muted: rgba(242,240,236,0.45);
+  --card: #111111;
+  --border: rgba(242,240,236,0.1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--white); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+::selection { background: var(--yellow); color: var(--bg); }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--yellow); }
+
+/* ── LOADER ── */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--yellow);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+  transition: clip-path 0.8s cubic-bezier(.76,0,.24,1) 0.2s;
+}
+#loader.hide { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+.loader-count {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px; line-height: 1; color: var(--bg);
+  letter-spacing: 0.05em;
+}
+.loader-label {
+  font-size: 12px; letter-spacing: 0.25em;
+  text-transform: uppercase; color: rgba(8,8,8,0.5);
+}
+.loader-progress {
+  width: 200px; height: 2px;
+  background: rgba(8,8,8,0.15); position: relative; overflow: hidden;
+}
+.loader-progress::after {
+  content: ''; position: absolute;
+  inset: 0; background: var(--bg);
+  animation: lprog 1.8s ease forwards;
+}
+@keyframes lprog { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); } }
+
+/* ── CURSOR ── */
+* { cursor: none !important; }
+.c-dot {
+  position: fixed; z-index: 8000; pointer-events: none;
+  width: 10px; height: 10px;
+  background: var(--yellow); border-radius: 50%;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: transform 0.2s;
+}
+.c-dot.big { transform: translate(-50%,-50%) scale(4); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  padding: 24px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(8,8,8,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; letter-spacing: 0.08em;
+  color: var(--white); text-decoration: none;
+}
+.nav-logo span { color: var(--yellow); }
+.nav-links { list-style: none; display: flex; gap: 8px; }
+.nav-links a {
+  padding: 8px 20px;
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.25s;
+}
+.nav-links a:hover { color: var(--yellow); border-color: var(--yellow); background: rgba(245,230,66,0.08); }
+.nav-badge {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  background: var(--yellow); color: var(--bg);
+  animation: pulseBadge 3s ease-in-out infinite;
+}
+@keyframes pulseBadge { 0%,100%{box-shadow:0 0 0 0 rgba(245,230,66,0.4)} 50%{box-shadow:0 0 0 12px rgba(245,230,66,0)} }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  padding: 100px 48px 64px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+
+/* Animated grid */
+.hero-grid-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(242,240,236,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242,240,236,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: gridMove 20s linear infinite;
+}
+@keyframes gridMove { from { background-position: 0 0; } to { background-position: 60px 60px; } }
+
+/* Glowing orbs */
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(100px);
+  animation: orbFloat 12s ease-in-out infinite;
+  pointer-events: none;
+}
+.orb-1 { width: 600px; height: 600px; background: rgba(245,230,66,0.12); top: -200px; right: -100px; animation-delay: 0s; }
+.orb-2 { width: 400px; height: 400px; background: rgba(255,45,120,0.1); bottom: -100px; left: -100px; animation-delay: 4s; }
+.orb-3 { width: 300px; height: 300px; background: rgba(15,244,198,0.08); top: 40%; left: 30%; animation-delay: 8s; }
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-50px) scale(1.1); }
+  66% { transform: translate(-30px,30px) scale(0.9); }
+}
+
+.hero-inner { position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--yellow);
+  margin-bottom: 32px;
+  animation: fadeUp 0.8s 2.2s ease both;
+}
+.hero-tag::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 14vw, 200px);
+  line-height: 0.88;
+  letter-spacing: 0.02em;
+  margin-bottom: 48px;
+}
+.hero-title .ht-line { overflow: hidden; display: block; }
+.hero-title .ht-line span { display: block; animation: slideUp 1s cubic-bezier(.76,0,.24,1) both; }
+.hero-title .ht-line:nth-child(1) span { animation-delay: 2.2s; }
+.hero-title .ht-line:nth-child(2) span { animation-delay: 2.35s; color: var(--yellow); -webkit-text-stroke: 0; }
+.hero-title .ht-line:nth-child(3) span { animation-delay: 2.5s; -webkit-text-stroke: 2px var(--white); color: transparent; }
+
+.hero-bottom {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 40px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.8s 2.8s ease both;
+}
+.hero-desc { max-width: 400px; color: var(--muted); font-size: 15px; line-height: 1.8; }
+.hero-desc strong { color: var(--white); font-weight: 600; }
+.hero-cta-group { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+.cta-primary {
+  display: inline-flex; align-items: center; gap: 16px;
+  padding: 18px 44px;
+  background: var(--yellow); color: var(--bg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 0.12em;
+  text-decoration: none; text-transform: uppercase;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s;
+}
+.cta-primary::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--pink);
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(.76,0,.24,1);
+}
+.cta-primary:hover::before { transform: translateX(0); }
+.cta-primary:hover { transform: translate(-3px,-3px); }
+.cta-primary span { position: relative; z-index: 1; }
+.cta-primary::after {
+  content: '';
+  position: absolute; inset: 0;
+  border: 2px solid var(--yellow);
+  transform: translate(8px,8px);
+  transition: transform 0.3s; z-index: -1;
+}
+.cta-primary:hover::after { transform: translate(12px,12px); }
+.cta-secondary {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color 0.3s;
+}
+.cta-secondary:hover { color: var(--white); }
+
+/* Marquee */
+.marquee-strip {
+  overflow: hidden; position: relative; z-index: 1;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.marquee-track {
+  display: flex; width: max-content;
+  animation: marquee 25s linear infinite;
+}
+.marquee-item {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px; letter-spacing: 0.2em;
+  color: var(--border);
+  padding: 0 32px; white-space: nowrap;
+  transition: color 0.3s;
+}
+.marquee-item.y { color: var(--yellow); }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  padding: 56px 48px;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px;
+  background: var(--border);
+}
+.stat-cell {
+  background: var(--bg);
+  padding: 40px;
+  text-align: center;
+  position: relative; overflow: hidden;
+  transition: background 0.4s;
+}
+.stat-cell::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(.76,0,.24,1);
+}
+.stat-cell:nth-child(1)::before { background: var(--yellow); }
+.stat-cell:nth-child(2)::before { background: var(--pink); }
+.stat-cell:nth-child(3)::before { background: var(--cyan); }
+.stat-cell:hover::before { transform: scaleX(1); }
+.stat-cell:hover { background: var(--card); }
+.stat-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px; line-height: 1; display: block;
+}
+.stat-cell:nth-child(1) .stat-big { color: var(--yellow); }
+.stat-cell:nth-child(2) .stat-big { color: var(--pink); }
+.stat-cell:nth-child(3) .stat-big { color: var(--cyan); }
+.stat-text { font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+
+/* ── WORK ── */
+#work { padding: 100px 48px; }
+.work-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 56px;
+}
+.work-head h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px,6vw,80px); letter-spacing: 0.05em;
+  line-height: 1;
+}
+.work-head h2 span { color: var(--yellow); }
+.view-all {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--yellow);
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  transition: gap 0.3s;
+}
+.view-all:hover { gap: 16px; }
+
+.cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.work-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 36px;
+  text-decoration: none; color: inherit;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color 0.4s, transform 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+.work-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.work-card:nth-child(1)::before { background: var(--yellow); }
+.work-card:nth-child(2)::before { background: var(--pink); }
+.work-card:nth-child(3)::before { background: var(--cyan); }
+.work-card:hover { border-color: var(--white); transform: translateY(-8px); }
+.card-icon { font-size: 40px; margin-bottom: 28px; }
+.card-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+.work-card:nth-child(1) .card-tag { color: var(--yellow); }
+.work-card:nth-child(2) .card-tag { color: var(--pink); }
+.work-card:nth-child(3) .card-tag { color: var(--cyan); }
+.card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.05em; margin-bottom: 12px; }
+.card-desc { font-size: 13px; line-height: 1.7; color: var(--muted); flex: 1; }
+.card-tech { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 24px; }
+.tech-tag { font-size: 10px; padding: 4px 10px; border: 1px solid var(--border); color: var(--muted); }
+.card-link {
+  position: absolute; top: 28px; right: 28px;
+  width: 40px; height: 40px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--muted);
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+.work-card:hover .card-link { border-color: var(--white); color: var(--white); transform: rotate(45deg); }
+
+/* ── ABOUT ── */
+#about { padding: 100px 48px; background: var(--card); }
+.about-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+}
+.about-left h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px,7vw,96px); letter-spacing: 0.05em;
+  line-height: 0.95; margin-bottom: 32px;
+}
+.about-left h2 .y { color: var(--yellow); }
+.about-left h2 .o { -webkit-text-stroke: 2px var(--white); color: transparent; }
+.about-left p { color: var(--muted); font-size: 15px; line-height: 1.9; margin-bottom: 16px; }
+.about-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; }
+.chip {
+  padding: 10px 22px; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  border: 1px solid var(--border); color: var(--muted);
+  transition: all 0.25s;
+}
+.chip:hover { border-color: var(--yellow); color: var(--yellow); }
+
+.about-right { display: flex; flex-direction: column; gap: 1px; }
+.about-item {
+  padding: 28px 32px;
+  background: var(--bg);
+  border-left: 3px solid transparent;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.about-item:hover { border-left-color: var(--yellow); transform: translateX(8px); }
+.about-item-num { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: var(--yellow); margin-bottom: 8px; }
+.about-item-title { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 0.05em; margin-bottom: 8px; }
+.about-item-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* ── CONTACT ── */
+#contact { padding: 120px 48px; text-align: center; background: var(--yellow); position: relative; overflow: hidden; }
+.contact-bg-text {
+  position: absolute; font-family: 'Bebas Neue', sans-serif;
+  font-size: min(30vw, 300px); line-height: 1; color: rgba(8,8,8,0.07);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none; white-space: nowrap; letter-spacing: 0.05em;
+}
+.contact-label { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(8,8,8,0.5); margin-bottom: 20px; position: relative; }
+.contact-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 12vw, 160px); line-height: 0.88;
+  color: var(--bg); letter-spacing: 0.03em;
+  margin-bottom: 48px; position: relative;
+}
+.contact-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; }
+.cta-dark {
+  padding: 18px 44px;
+  background: var(--bg); color: var(--yellow);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 0.12em;
+  text-decoration: none; text-transform: uppercase;
+  border: 3px solid var(--bg);
+  transition: all 0.3s;
+}
+.cta-dark:hover { background: transparent; color: var(--bg); }
+.cta-outline {
+  padding: 18px 44px;
+  background: transparent; color: var(--bg);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 0.12em;
+  text-decoration: none; text-transform: uppercase;
+  border: 3px solid var(--bg);
+  transition: all 0.3s;
+}
+.cta-outline:hover { background: var(--bg); color: var(--yellow); }
+
+footer {
+  padding: 32px 48px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted);
+}
+
+@keyframes slideUp { from { transform: translateY(110%); } to { transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: all 0.8s cubic-bezier(.76,0,.24,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.rd1 { transition-delay: 0.1s; } .rd2 { transition-delay: 0.2s; } .rd3 { transition-delay: 0.3s; }
+
+@media (max-width: 900px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .about-inner { grid-template-columns: 1fr; }
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 90px 24px 48px; }
+  #work, #about, #contact { padding: 80px 24px; }
+  .stats-bar { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-count" id="loaderCount">0</div>
+  <div class="loader-label">Loading Portfolio</div>
+  <div class="loader-progress"></div>
+</div>
+
+<!-- Cursor -->
+<div class="c-dot" id="cDot"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo"><span>MKA</span></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-badge">Freelance Open</div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-inner">
+    <div class="hero-tag">Android · Data Viz · Web · Tachileik, Myanmar</div>
+    <h1 class="hero-title">
+      <span class="ht-line"><span>MOE</span></span>
+      <span class="ht-line"><span>KYAW</span></span>
+      <span class="ht-line"><span>AUNG</span></span>
+    </h1>
+  </div>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      <strong>Developer & Designer</strong> — crafting clean, functional digital experiences across three tech stacks. Based in Myanmar, building for the world.
+    </p>
+    <div class="hero-cta-group">
+      <a href="#work" class="cta-primary"><span>VIEW WORK</span> <span>→</span></a>
+      <a href="https://github.com/Moekyawaung" target="_blank" class="cta-secondary">GITHUB ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">KOTLIN</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">JETPACK COMPOSE</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">R / GGPLOT2</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">SHINY</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">JEKYLL</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">MATERIAL 3</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">MVVM</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">KOTLIN</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">JETPACK COMPOSE</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">R / GGPLOT2</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">SHINY</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">JEKYLL</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">MATERIAL 3</span><span class="marquee-item y"> ✦ </span>
+    <span class="marquee-item">MVVM</span><span class="marquee-item y"> ✦ </span>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stat-cell reveal">
+    <span class="stat-big">3+</span>
+    <div class="stat-text">Years of Experience</div>
+  </div>
+  <div class="stat-cell reveal rd1">
+    <span class="stat-big">10+</span>
+    <div class="stat-text">Projects Shipped</div>
+  </div>
+  <div class="stat-cell reveal rd2">
+    <span class="stat-big">3</span>
+    <div class="stat-text">Tech Stacks Mastered</div>
+  </div>
+</div>
+
+<!-- Work -->
+<section id="work">
+  <div class="work-head reveal">
+    <h2>Featured <span>Work</span></h2>
+    <a href="https://github.com/Moekyawaung" target="_blank" class="view-all">All Projects →</a>
+  </div>
+  <div class="cards-grid">
+    <a href="https://github.com/Moekyawaung" target="_blank" class="work-card reveal">
+      <div class="card-icon">📱</div>
+      <div class="card-tag">Android Development</div>
+      <div class="card-title">Portfolio App</div>
+      <div class="card-desc">Modern Android application demonstrating clean architecture, Material 3 design system, and smooth Compose UI animations.</div>
+      <div class="card-tech">
+        <span class="tech-tag">Kotlin</span>
+        <span class="tech-tag">Jetpack Compose</span>
+        <span class="tech-tag">MVVM</span>
+        <span class="tech-tag">Material 3</span>
+      </div>
+      <div class="card-link">↗</div>
+    </a>
+    <a href="#" class="work-card reveal rd1">
+      <div class="card-icon">📊</div>
+      <div class="card-tag">Data Visualization</div>
+      <div class="card-title">Dashboard</div>
+      <div class="card-desc">Interactive dashboards and publication-quality charts built with R, ggplot2, and Shiny — designed for academic and portfolio use.</div>
+      <div class="card-tech">
+        <span class="tech-tag">R</span>
+        <span class="tech-tag">ggplot2</span>
+        <span class="tech-tag">Shiny</span>
+        <span class="tech-tag">Tidyverse</span>
+      </div>
+      <div class="card-link">↗</div>
+    </a>
+    <a href="https://moekyawaung.github.io/" target="_blank" class="work-card reveal rd2">
+      <div class="card-icon">🌐</div>
+      <div class="card-tag">Web Design</div>
+      <div class="card-title">Portfolio Site</div>
+      <div class="card-desc">Custom-designed Jekyll site using glassmorphism aesthetics, hosted on GitHub Pages with fully responsive layout.</div>
+      <div class="card-tech">
+        <span class="tech-tag">Jekyll</span>
+        <span class="tech-tag">CSS3</span>
+        <span class="tech-tag">GitHub Pages</span>
+        <span class="tech-tag">Responsive</span>
+      </div>
+      <div class="card-link">↗</div>
+    </a>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-left reveal">
+      <h2>
+        WHO<br>
+        <span class="y">I</span><br>
+        <span class="o">AM</span>
+      </h2>
+      <p>Moe Kyaw Aung — Android developer, web designer, and data visualization specialist from Tachileik, Myanmar. I build things that work, look great, and make a difference.</p>
+      <p>Available for freelance projects worldwide. 3+ years, 10+ projects, zero compromises on quality.</p>
+      <div class="about-chips">
+        <span class="chip">Kotlin</span>
+        <span class="chip">Compose</span>
+        <span class="chip">MVVM</span>
+        <span class="chip">R</span>
+        <span class="chip">ggplot2</span>
+        <span class="chip">Shiny</span>
+        <span class="chip">Jekyll</span>
+        <span class="chip">CSS3</span>
+      </div>
+    </div>
+    <div class="about-right reveal rd1">
+      <div class="about-item">
+        <div class="about-item-num">01 — ANDROID</div>
+        <div class="about-item-title">Native App Development</div>
+        <div class="about-item-desc">Kotlin, Jetpack Compose, MVVM architecture, and Material 3. Building performant, beautiful Android apps.</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-num">02 — DATA</div>
+        <div class="about-item-title">Data Visualization</div>
+        <div class="about-item-desc">R ecosystem — ggplot2, Shiny, Tidyverse. Transforming raw data into interactive, publication-quality visuals.</div>
+      </div>
+      <div class="about-item">
+        <div class="about-item-num">03 — WEB</div>
+        <div class="about-item-title">Web Design & Development</div>
+        <div class="about-item-desc">Jekyll, CSS3, GitHub Pages. Clean, responsive websites with thoughtful design and smooth animations.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="contact-bg-text">HIRE ME</div>
+  <p class="contact-label reveal">Available for Freelance</p>
+  <h2 class="contact-title reveal">
+    LET'S<br>BUILD IT
+  </h2>
+  <div class="contact-btns reveal">
+    <a href="https://moekyawaung.github.io/#contact" target="_blank" class="cta-dark">CONTACT ME</a>
+    <a href="https://github.com/Moekyawaung" target="_blank" class="cta-outline">GITHUB</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2024 Moe Kyaw Aung</span>
+  <span>Tachileik, Myanmar</span>
+</footer>
+
+<script>
+// Loader counter
+let count = 0;
+const lc = document.getElementById('loaderCount');
+const interval = setInterval(() => {
+  count += Math.floor(Math.random() * 15) + 5;
+  if (count >= 100) { count = 100; clearInterval(interval); }
+  lc.textContent = count;
+}, 80);
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hide'), 2200);
+});
+
+// Cursor
+const dot = document.getElementById('cDot');
+document.addEventListener('mousemove', e => {
+  dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => dot.classList.add('big'));
+  el.addEventListener('mouseleave', () => dot.classList.remove('big'));
+});
+
+// Reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
